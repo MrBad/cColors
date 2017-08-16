@@ -5,7 +5,7 @@
 #include "error.h"
 #include "sprite.h"
 #include "gl_program.h"
-
+#include "texture.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -26,6 +26,12 @@ int main()
 	
 	sprite = spriteNew(-1.0f, -1.0f, 2.0f, 2.0f);
 	
+	Texture* texture = loadTexture("resources/earth.png");
+	if(!texture) {
+		fatalError("Cannot load texture\n");
+	}
+	fprintf(stdout, "texture: %d, %dx%d\n", texture->id, texture->width, texture->height);
+
 	program = glProgramNew();
 	glProgramCompileShaders(program, "shaders/color_shader");
 	glProgramAddAttribute(program, "vertexPosition");
@@ -42,14 +48,23 @@ int main()
 		time += 0.05f;
 		glClearDepth(1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		
 		glProgramUse(program);
-	
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->id);
+		GLint textureLocation = glGetUniformLocation(program->programID, "mySampler");
+		glUniform1i(textureLocation, 0);
+
+		// send time to shader
 		GLint timeLocation = glGetUniformLocation(program->programID, "time");
 		glUniform1f(timeLocation, time);
 
+
 		spriteDraw(sprite);
 
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glProgramUnuse(program);
 		
 		windowUpdate(window);

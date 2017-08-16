@@ -3,12 +3,13 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include "error.h"
+#include "file_buf.h"
 #include "gl_program.h"
 
 
 static void compileShader(const char *fullPath, GLuint shaderID) 
 {
-	struct stat st;
+	/*struct stat st;
 	char *content;
 	FILE *fp;
 	int n_bytes, n_read, left;
@@ -31,8 +32,16 @@ static void compileShader(const char *fullPath, GLuint shaderID)
 		n_read += n_bytes;
 	}
 	content[st.st_size] = 0;
+	*/
 
-	glShaderSource(shaderID, 1, (const GLchar**)&content, NULL);
+	FileBuf *fBuf = fileBufNew(fullPath);
+	if(!fBuf) {
+		fatalError("Cannot open: %s\n", fullPath);
+	}
+	fileBufLoad(fBuf);
+
+	//glShaderSource(shaderID, 1, (const GLchar**)&content, NULL);
+	glShaderSource(shaderID, 1, (const GLchar**)&fBuf->data, NULL);
 	glCompileShader(shaderID);
 	
 	// error handling //
@@ -49,8 +58,9 @@ static void compileShader(const char *fullPath, GLuint shaderID)
 		exit(1);
 	}
 
-	free(content);
-	fclose(fp);
+	//free(content);
+	//fclose(fp);
+	fileBufDelete(fBuf);
 }
 
 GLProgram* glProgramNew() 

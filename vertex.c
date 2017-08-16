@@ -16,3 +16,10 @@ int vertexSetColor(Vertex *v, float r, float g, float b, float a)
 	v->color.a = a;
 	return 0;
 }
+
+int vertexSetUV(Vertex *vert, float u, float v) 
+{
+	vert->uv.u = u;
+	vert->uv.v = v;
+	return 0;
+}
