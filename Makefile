@@ -6,7 +6,7 @@ OFLAGS=-c
 CFLAGS=-g -Wall -Wextra -std=c99 -pedantic-errors -I$(INCLUDE)
 
 TARGET=colors
-OBJECTS=main.o error.o sprite.o vertex.o gl_program.o
+OBJECTS=main.o window.o error.o sprite.o vertex.o gl_program.o 
 
 all: $(OBJECTS) Makefile
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
