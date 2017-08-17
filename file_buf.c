@@ -3,20 +3,24 @@
 #include <string.h>
 #include <sys/stat.h>
 
+// maybe i should rewrite this into a more simple file_get_contents() like
+
 FileBuf *fileBufNew(const char *path)
 {
 	struct stat st;
+
+	if(stat(path, &st) < 0) {
+		fprintf(stderr, "Cannot stat: %s\n", path);
+		return NULL;
+	}
 
 	FileBuf *fBuf = calloc(1, sizeof(fBuf));
 	if(!fBuf) {
 		fprintf(stderr, "Cannot calloc fBuf\n");
 		return NULL;
 	}
-	if(stat(path, &st) < 0) {
-		fprintf(stderr, "Cannot stat: %s\n", path);
-		free(fBuf);
-		return NULL;
-	}
+
+	// c11 does not know about strdup
 	fBuf->path = calloc(1, strlen(path) + 1);
 	if(!fBuf->path) {
 		fprintf(stderr, "Cannot calloc fBuf->path\n");

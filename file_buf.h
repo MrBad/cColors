@@ -2,11 +2,12 @@
 #define FILE_BUF_H
 
 #include <stdlib.h>
+#include <sys/types.h>
 // an in memory file representation
 typedef struct {
 	char *path;
 	char *data;
-	size_t size;
+	off_t size;
 } FileBuf;
 
 

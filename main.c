@@ -30,7 +30,7 @@ int main()
 	if(!texture) {
 		fatalError("Cannot load texture\n");
 	}
-	fprintf(stdout, "texture: %d, %dx%d\n", texture->id, texture->width, texture->height);
+	//fprintf(stdout, "texture: %d, %dx%d\n", texture->id, texture->width, texture->height);
 
 	program = glProgramNew();
 	glProgramCompileShaders(program, "shaders/color_shader");

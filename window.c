@@ -33,7 +33,11 @@ Window *windowNew(const char *title, int width, int height, int flags)
 	if(glewInit() != GLEW_OK) {
 		fatalError("Cannot init glew\n");
 	}
+	printf("--- OpenGL Version: %s ---\n", glGetString(GL_VERSION));
 	windowSetClearColor(0, 0, 0.3, 1);
+
+	SDL_GL_SetSwapInterval(1);
+
 	return window;
 	
 
